@@ -98,16 +98,18 @@ def main(project_id, query_string, batch, num_retries, interval):
 
     # Page through the result set and print all results.
     page_token = None
+    o = open ("out.json","w")
     while True:
         page = bigquery.jobs().getQueryResults(
             pageToken=page_token,
             **query_job['jobReference']).execute(num_retries=2)
 
-        print(json.dumps(page['rows']))
+        o.write(json.dumps(page['rows']) + "\n")
 
         page_token = page.get('pageToken')
         if not page_token:
             break
+    o.close()
 # [END run]
 
 
